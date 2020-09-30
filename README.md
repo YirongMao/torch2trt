@@ -16,7 +16,7 @@ You can find hwo to add a custom plugin:  [flattenconcat] (https://github.com/Yi
             x = x.view(x.shape[0], -1, 1, 1)
             y = y.view(y.shape[0], -1, 1, 1)
             return torch.cat([x, y], 1)
-    ```
+    
 The corresponding code is in 
     
   
