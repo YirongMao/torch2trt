@@ -1,4 +1,4 @@
-# torch2trt-Custom
+# torch2trt-custom
 This project is forked from https://github.com/NVIDIA-AI-IOT/torch2trt.
 
 This forked version shows how to add a new tensorrt plugin. 
@@ -20,9 +20,29 @@ class FlatCat(torch.nn.Module):
         return torch.cat([x, y], 1)
 ```
     
-The corresponding code is in [custom_plugins.py]
+The corresponding code is in [custom_plugins.py](https://github.com/YirongMao/torch2trt/blob/master/torch2trt/custom_plugins.py)
+
+(2) import custom_plugin.py https://github.com/YirongMao/torch2trt/blob/master/torch2trt/torch2trt.py#L6
     
-  
-    
+(3) create a new converter:
+```python
+@tensorrt_converter('FlatCat.forward')
+def convert_flatcat(ctx):
+    input_a = ctx.method_args[1]
+    input_b = ctx.method_args[2]
+    input_a_trt, input_b_trt = add_missing_trt_tensors(ctx.network, [input_a, input_b])
+    plg_registry = trt.get_plugin_registry()
+    plg_creator = plg_registry.get_plugin_creator("FlattenConcatCustom", "1", "")
+    axis_pf = trt.PluginField("axis", np.array([1], np.int32), trt.PluginFieldType.INT32)
+    batch_pf = trt.PluginField("ignoreBatch", np.array([0], np.int32), trt.PluginFieldType.INT32)
+    pfc = trt.PluginFieldCollection([axis_pf, batch_pf])
+    fn = plg_creator.create_plugin("FlattenConcatCustom1", pfc)
+    layer = ctx.network.add_plugin_v2([input_a_trt, input_b_trt], fn)
+    output = ctx.method_return
+    output._trt = layer.get_output(0)
+```
+
+The corresponding code is in [flattenconcat.py](https://github.com/YirongMao/torch2trt/blob/master/torch2trt/converters/flattenconcat.py)
+
     
     
