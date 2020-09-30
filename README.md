@@ -8,17 +8,17 @@ You can find hwo to add a custom plugin:  [flattenconcat] (https://github.com/Yi
 (1) create a class from torch.nn.Module
 
 
-    ```python
-    import torch
-    class FlatCat(torch.nn.Module):
-        def __init__(self):
-            super(FlatCat, self).__init__()
+```python
+import torch
+class FlatCat(torch.nn.Module):
+    def __init__(self):
+        super(FlatCat, self).__init__()
 
-        def forward(self, x, y):
-            x = x.view(x.shape[0], -1, 1, 1)
-            y = y.view(y.shape[0], -1, 1, 1)
-            return torch.cat([x, y], 1)
-    ```
+    def forward(self, x, y):
+        x = x.view(x.shape[0], -1, 1, 1)
+        y = y.view(y.shape[0], -1, 1, 1)
+        return torch.cat([x, y], 1)
+```
     
 The corresponding code is in [custom_plugins.py]
     
