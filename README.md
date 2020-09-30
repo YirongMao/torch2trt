@@ -6,7 +6,7 @@ This forked version shows how to add a new tensorrt plugin.
 You can find hwo to add a custom plugin:  [flattenconcat] (https://github.com/YirongMao/TensorRT-Custom-Plugin). I will detail how to transfer this plugin from pytorch to tensorrt.
 
 (1) create a class from torch.nn.Module
-    ```python
+    ``` python
     import torch
     class FlatCat(torch.nn.Module):
         def __init__(self):
@@ -17,6 +17,9 @@ You can find hwo to add a custom plugin:  [flattenconcat] (https://github.com/Yi
             y = y.view(y.shape[0], -1, 1, 1)
             return torch.cat([x, y], 1)
     ```
+The corresponding code is in 
+    
+  
     
     
     
