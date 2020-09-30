@@ -7,6 +7,7 @@ You can find hwo to add a custom plugin:  [flattenconcat] (https://github.com/Yi
 
 (1) create a class from torch.nn.Module
 
+
     ```python
     import torch
     class FlatCat(torch.nn.Module):
