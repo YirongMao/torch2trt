@@ -3,7 +3,7 @@ import tensorrt as trt
 from copy import copy
 import numpy as np
 import io
-from custom_plugins import *
+from .custom_plugins import *
 
 from .calibration import (
     TensorBatchDataset,
