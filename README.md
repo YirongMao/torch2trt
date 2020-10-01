@@ -3,7 +3,7 @@ This project is forked from https://github.com/NVIDIA-AI-IOT/torch2trt.
 
 This forked version shows how to add a new tensorrt plugin. 
 
-You can find hwo to add a custom plugin:  [flattenconcat] (https://github.com/YirongMao/TensorRT-Custom-Plugin). I will detail how to transfer this plugin from pytorch to tensorrt.
+You can find hwo to add a custom plugin:  [flattenconcat](https://github.com/YirongMao/TensorRT-Custom-Plugin). I will detail how to transfer this plugin from pytorch to tensorrt.
 
 (1) create a class from torch.nn.Module
 
@@ -44,5 +44,30 @@ def convert_flatcat(ctx):
 
 The corresponding code is in [flattenconcat.py](https://github.com/YirongMao/torch2trt/blob/master/torch2trt/converters/flattenconcat.py)
 
+(4) After that, it's ready to transfer the torch model with flattenconcat module into tensorrt:
+```python
+# create example data
+x = torch.ones((1, 4, 2, 2)).cuda()
+y = torch.ones((1, 3, 2, 2)).cuda()
+
+class Model(torch.nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+        self.layer = FlatCat()
+
+    def forward(self, x, y):
+        return self.layer(x, y)
+
+model = Model().cuda()
+z = model.forward(x, y)
+print(z.shape)
+print(model)
+
+# convert to TensorRT feeding sample data as input
+model_trt = torch2trt(model, [x, y], max_batch_size=10)
+with open('flatcat.engine', 'wb') as f:
+    f.write(model_trt.engine.serialize())
+```
+The corresponding code is in [convert_flattencat.py]https://github.com/YirongMao/torch2trt/blob/master/torch2trt/convert_flattencat.py
     
     
