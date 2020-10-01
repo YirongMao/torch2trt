@@ -68,6 +68,6 @@ model_trt = torch2trt(model, [x, y], max_batch_size=10)
 with open('flatcat.engine', 'wb') as f:
     f.write(model_trt.engine.serialize())
 ```
-The corresponding code is in [convert_flattencat.py]https://github.com/YirongMao/torch2trt/blob/master/torch2trt/convert_flattencat.py
+The corresponding code is in [convert_flattencat.py](https://github.com/YirongMao/torch2trt/blob/master/torch2trt/convert_flattencat.py)
     
     
